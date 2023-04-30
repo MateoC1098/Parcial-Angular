@@ -10,6 +10,8 @@ import { PlantasService } from '../plantas.service';
 export class PlantasListComponent implements OnInit {
 
   plantas: Plantas[] = []
+  totalPlantasInt = 0;
+  totalPlantasExt = 0;
 
   constructor(private plantasService: PlantasService) { }
 
@@ -17,8 +19,16 @@ export class PlantasListComponent implements OnInit {
   ngOnInit() {
     this.plantasService.getPlantas().subscribe(
       (data) => {
-        this.plantas = data
+        this.plantas = data;
+        this.totalPlantasInt = this.plantas.reduce((total, planta) => {
+          return planta.tipo === 'Interior' ? total +1 : total;
+        }, 0);
+
+        this.totalPlantasExt = this.plantas.reduce((total, planta) => {
+          return planta.tipo === 'Exterior' ? total +1 : total;
+        }, 0);
       }
+
     )
   }
 
